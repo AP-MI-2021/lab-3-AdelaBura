@@ -134,6 +134,54 @@ def show_div(lista):
     else:
         print('Nu exista nicio secventa formata din numere care au acelasi numar')
 
+# PROBLEMA 11
+def number_of_1_bits(numar: int) -> int:
+    # returneaza numarul de biti de 1 din reprezentarea binara a numarului primit
+    numar_de_1_biti = 0
+    while numar:
+        if numar % 2 == 1:
+            numar_de_1_biti += 1
+        numar = numar // 2
+    return numar_de_1_biti
+
+
+def all_same_number_of_1_bits(lista):
+    # returneaza True daca toate numerele din lista primita au acelasi numar de biti de 1 in reprezentarea binara
+    element = 0
+    for numar in lista:
+        if element == 0:
+            number_of_1_bits_var = number_of_1_bits(numar)
+        if not number_of_1_bits(numar) == number_of_1_bits_var:
+            return False
+        element += 1
+    return True
+
+
+def get_longest_same_bit_counts(lst: list[int]) -> list[int]:
+    # returneaza cea mai lunga secventa cu proprietatea ca toate numerele au acelasi numar de biti de 1 in reprezentarea lor binara
+    lista_secvente = []
+
+    for start in range(0, len(lst)):
+        for end in range(start + 1, len(lst)):
+            if all_same_number_of_1_bits(lst[start:end]):
+                lista_secvente.append(lst[start:end])
+
+    secventa_maxima = []
+
+    for secventa in lista_secvente:
+        if len(secventa) >= len(secventa_maxima):
+            secventa_maxima = secventa
+    return secventa_maxima
+
+def show_bit(lista):
+    secventa_bit = get_longest_same_bit_counts(lista)
+    if len(secventa_bit) != 0:
+        secventa_bit_str = ''
+        for bit in secventa_bit:
+            secventa_bit_str += str(bit) + ' '
+        print(f'Cea mai lunga secventa cu proprietatea ca toate numerele au acelasi numar de biti de 1 in reprezentarea lor binara: {secventa_bit_str}')
+    else:
+        print('Nu exista nicio secventa formata doar din numere care au acelasi numar de biti de 1 in reprezentarea lor binara')
 
 def menu():
     # printeaza meniul
@@ -141,6 +189,7 @@ def menu():
     1. Citire lista
     2. Determinare cea mai lungă subsecvență cu proprietatea ca toate numerle sunt patrate perfecte
     3. Determinare cea mai lungă subsecvență cu proprietatea ca toate numerle au acelasi numar de divizori
+    4. Determinare cea mai lunga subsecventa cu proprietatea ca toate numerele au acelasi numar de biti de 1 in reprezentarea lor binara
     x. Inchide aplicatia
     ''')
     lista_numere = []
@@ -152,6 +201,8 @@ def menu():
             show_ps(lista_numere)
         elif cmd == '3':
             show_div(lista_numere)
+        elif cmd == '4':
+            show_bit(lista_numere)
         else:
             print("Introduceti o comanda valida")
         cmd = input('Alegeti comanda: ')
